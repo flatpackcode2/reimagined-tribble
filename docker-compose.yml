@@ -10,3 +10,18 @@ services:
       - .:/code
   redis:
     image: "redis:alpine"
+  portcast_db:
+    image: postgres
+    restart: always
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_DB: local
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
