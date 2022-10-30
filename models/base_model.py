@@ -1,17 +1,18 @@
-from playhouse.postgres_ext import PostgresqlExtDatabase
-from playhouse.relfection import generate_models, print_model, print_table_sql
-
+from email.headerregistry import ContentDispositionHeader
 from peewee import *
+from playhouse.db_url import connect
 
-db  = PostgresqlDatabase('local.db',user='postgres', password='password', host='127.0.0.1', port=5432)
-models = generate_models(db)
-print(list(models.items()))
-globals().update(models)
+import datetime
 
+db = connect('postgresql://postgres:password@portcast_db:5432/local')
+class BaseModel(Model):
+    created_at = DateTimeField(default=datetime.datetime.now)
 
-class Person(Model):
-    name = CharField()
-    birthday = DateField()
-
+    def validate(self):
+        print(
+            f"Warning validation method not implemented for {str(type(self))}"
+        )
+        return True
     class Meta:
-        database = db # This model uses the "people.db" database.
+        database =db
+
