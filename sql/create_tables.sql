@@ -3,3 +3,5 @@ CREATE TABLE IF NOT EXISTS content (
   created_at TIMESTAMP,
   body TEXT
 );
+
+CREATE INDEX fts_body ON content USING gin(to_tsvector('english', body));

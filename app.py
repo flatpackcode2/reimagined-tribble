@@ -23,7 +23,7 @@ def _db_close(exc):
     return exc
 
 @app.route('/')
-def hello():
+def get_text():
     x = requests.get(f'http://metaphorpsum.com/paragraphs/{DEFAULT_PARAGRAPHS}/{DEFAULT_SENTENCES}')
 
     try:
@@ -42,3 +42,36 @@ def hello():
             'message': 'Unable to retrieve text'
         }
         return make_response(jsonify(response),200)
+
+@app.route('/search')
+def search():
+    operator=request.args.get('operator')
+    terms=request.args.get('terms')
+    print(f'the operators are {operator}')
+    print(f'''{operator=='and'}''')
+    if operator == 'or':
+        response = Content.select().where(Content.body.contains(terms))
+    if operator == 'and':
+        response = Content.select().where(Content.body.contains(terms))
+
+    if (operator !='or' and operator!='and'):
+        response={
+        'message':'Operator is invalid. Please use either \'and\' or \'or\'',
+        'operator':operator,
+        'terms':terms
+        }
+    
+    return make_response(jsonify(response),200)
+
+    #get paragraphs
+    hits = Content.raw('SELECT body FROM content where ')
+    print(f'the terms are {terms}')
+
+    string
+    
+    response={
+        'message':'OK',
+        'operator':operator,
+        'terms':terms
+    }
+    return make_response(jsonify(response),200)

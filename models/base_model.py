@@ -15,4 +15,5 @@ class BaseModel(Model):
         return True
     class Meta:
         database =db
+        legacy_table_names=False
 
